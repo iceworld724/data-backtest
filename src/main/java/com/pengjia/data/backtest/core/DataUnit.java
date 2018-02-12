@@ -1,5 +1,8 @@
 package com.pengjia.data.backtest.core;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 public class DataUnit {
 
     private float open;
@@ -7,6 +10,7 @@ public class DataUnit {
     private float high;
     private float low;
     private float vol;
+    private Map<Signal, Float> signals = new EnumMap<>(Signal.class);
 
     public float getOpen() {
         return open;
@@ -46,5 +50,17 @@ public class DataUnit {
 
     public void setVol(float vol) {
         this.vol = vol;
+    }
+
+    public Map<Signal, Float> getSignals() {
+        return signals;
+    }
+
+    public void setSignals(Map<Signal, Float> signals) {
+        this.signals = signals;
+    }
+    
+    public Float getSignal(Signal signal) {
+        return signals.get(signal);
     }
 }
