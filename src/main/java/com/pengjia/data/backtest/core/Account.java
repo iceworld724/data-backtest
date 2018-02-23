@@ -10,8 +10,8 @@ public class Account {
 
     public boolean isShortOn(DataPointer pointer) {
         for (Deal deal : unCompleteDeals) {
-            if (deal.getSymbol().equals(pointer.getSymbol())
-                    && deal.getType().equals(DealType.SHORT)) {
+            if (deal.symbol.equals(pointer.getSymbol())
+                    && deal.type.equals(DealType.SHORT)) {
                 return true;
             }
         }
@@ -20,8 +20,8 @@ public class Account {
 
     public boolean isLongOn(DataPointer pointer) {
         for (Deal deal : unCompleteDeals) {
-            if (deal.getSymbol().equals(pointer.getSymbol())
-                    && deal.getType().equals(DealType.LONG)) {
+            if (deal.symbol.equals(pointer.getSymbol())
+                    && deal.type.equals(DealType.LONG)) {
                 return true;
             }
         }
