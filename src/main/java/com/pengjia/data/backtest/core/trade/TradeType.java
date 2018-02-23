@@ -2,5 +2,5 @@ package com.pengjia.data.backtest.core.trade;
 
 public enum TradeType {
 
-    LONG, SHORT;
+    LONG, SHORT, STOP_LONG, STOP_SHORT;
 }

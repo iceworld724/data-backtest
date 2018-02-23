@@ -1,41 +1,41 @@
 package com.pengjia.data.backtest.core;
 
-import com.pengjia.data.backtest.core.trade.TradeType;
-import com.pengjia.data.backtest.core.data.DataPointer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Account {
 
     private float cash;
-    private List<Deal> unCompleteDeals = new ArrayList<Deal>();
-    private List<Deal> completeDeals = new ArrayList<Deal>();
+    private Map<String, List<Deal>> unCompleteDeals
+            = new ConcurrentHashMap<String, List<Deal>>();
+    private Map<String, List<Deal>> completeDeals
+            = new ConcurrentHashMap<String, List<Deal>>();
 
-    public boolean isShortOn(DataPointer pointer) {
-        for (Deal deal : unCompleteDeals) {
-            if (deal.symbol.equals(pointer.getSymbol())
-                    && deal.type.equals(TradeType.SHORT)) {
-                return true;
-            }
-        }
-        return false;
+    public float getCash() {
+        return cash;
     }
 
-    public boolean isLongOn(DataPointer pointer) {
-        for (Deal deal : unCompleteDeals) {
-            if (deal.symbol.equals(pointer.getSymbol())
-                    && deal.type.equals(TradeType.LONG)) {
-                return true;
-            }
+    public void setCash(float cash) {
+        this.cash = cash;
+    }
+
+    public void addDeal(Deal deal) {
+        List<Deal> deals = unCompleteDeals.get(deal.symbol);
+        if (deals == null) {
+            deals = new ArrayList<Deal>();
         }
-        return false;
+        deals.add(deal);
+        unCompleteDeals.put(deal.symbol, deals);
     }
 
     public synchronized float marketValue(Map<String, Float> prices) {
         float sum = cash;
-        for (Deal deal : unCompleteDeals) {
-            sum += deal.marketValue(prices.get(deal.symbol));
+        for (List<Deal> deals : unCompleteDeals.values()) {
+            for (Deal deal : deals) {
+                sum += deal.marketValue(prices.get(deal.symbol));
+            }
         }
         return sum;
     }

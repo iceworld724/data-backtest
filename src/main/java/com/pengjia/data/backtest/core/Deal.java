@@ -10,8 +10,8 @@ public class Deal {
 
     public static class Prices {
 
-        public float highestPrice;
-        public float lowestPrice;
+        public float highestPrice = Float.MIN_VALUE;
+        public float lowestPrice = Float.MAX_VALUE;
         public float price;
     }
 
@@ -30,11 +30,10 @@ public class Deal {
         profit = profit(this, price);
         deposit = 0;
         minDeposit = 0;
-        float cash = num * price;
         num = 0;
         status = DealStatus.COMPLETE;
         setPrice(price);
-        return cash;
+        return marketValue(price);
     }
 
     public void setPrice(float price) {

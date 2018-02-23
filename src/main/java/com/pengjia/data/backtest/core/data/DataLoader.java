@@ -4,5 +4,5 @@ import com.pengjia.data.backtest.core.Data;
 
 public interface DataLoader {
 
-    Data load();
+    Data load() throws Exception;
 }

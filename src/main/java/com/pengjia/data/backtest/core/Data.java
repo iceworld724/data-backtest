@@ -9,6 +9,17 @@ public class Data {
     private List<DataUnit> dataUnits = new ArrayList<DataUnit>();
     private String symbol;
 
+    public Data() {
+    }
+
+    public Data(String symbol) {
+        this.symbol = symbol;
+    }
+    
+    public void addDataUnit(DataUnit dataUnit) {
+        dataUnits.add(dataUnit);
+    }
+    
     public List<DataUnit> getDataUnits() {
         return dataUnits;
     }
