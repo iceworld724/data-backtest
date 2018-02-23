@@ -1,6 +1,7 @@
 package com.pengjia.data.backtest.core;
 
 import java.util.List;
+import java.util.Map;
 
 public class Account {
 
@@ -26,5 +27,13 @@ public class Account {
             }
         }
         return false;
+    }
+
+    public synchronized float marketValue(Map<String, Float> prices) {
+        float sum = cash;
+        for (Deal deal : unCompleteDeals) {
+            sum += deal.marketValue(prices.get(deal.symbol));
+        }
+        return sum;
     }
 }
