@@ -1,6 +1,6 @@
 package com.pengjia.data.backtest.core;
 
-import com.pengjia.data.backtest.core.deal.DealType;
+import com.pengjia.data.backtest.core.trade.TradeType;
 import com.pengjia.data.backtest.core.data.DataPointer;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class Account {
     public boolean isShortOn(DataPointer pointer) {
         for (Deal deal : unCompleteDeals) {
             if (deal.symbol.equals(pointer.getSymbol())
-                    && deal.type.equals(DealType.SHORT)) {
+                    && deal.type.equals(TradeType.SHORT)) {
                 return true;
             }
         }
@@ -25,7 +25,7 @@ public class Account {
     public boolean isLongOn(DataPointer pointer) {
         for (Deal deal : unCompleteDeals) {
             if (deal.symbol.equals(pointer.getSymbol())
-                    && deal.type.equals(DealType.LONG)) {
+                    && deal.type.equals(TradeType.LONG)) {
                 return true;
             }
         }
