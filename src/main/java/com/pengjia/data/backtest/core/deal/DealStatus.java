@@ -1,4 +1,4 @@
-package com.pengjia.data.backtest.core;
+package com.pengjia.data.backtest.core.deal;
 
 public enum DealStatus {
 

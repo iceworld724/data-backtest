@@ -1,4 +1,6 @@
-package com.pengjia.data.backtest.core;
+package com.pengjia.data.backtest.core.data;
+
+import com.pengjia.data.backtest.core.Data;
 
 public class DataPointer {
 

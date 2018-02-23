@@ -1,10 +1,12 @@
 package com.pengjia.data.backtest.core;
 
+import com.pengjia.data.backtest.core.data.DataUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
     
-    private List<DataUnit> dataUnits;
+    private List<DataUnit> dataUnits = new ArrayList<DataUnit>();
     private String symbol;
 
     public List<DataUnit> getDataUnits() {

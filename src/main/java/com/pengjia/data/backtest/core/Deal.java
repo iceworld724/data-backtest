@@ -1,5 +1,8 @@
 package com.pengjia.data.backtest.core;
 
+import com.pengjia.data.backtest.core.deal.DealStatus;
+import com.pengjia.data.backtest.core.deal.quit.QuitCondition;
+import com.pengjia.data.backtest.core.deal.DealType;
 import java.util.ArrayList;
 import java.util.Collection;
 

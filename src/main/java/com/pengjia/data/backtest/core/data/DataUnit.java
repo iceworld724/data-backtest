@@ -1,5 +1,6 @@
-package com.pengjia.data.backtest.core;
+package com.pengjia.data.backtest.core.data;
 
+import com.pengjia.data.backtest.core.Signal;
 import java.util.EnumMap;
 import java.util.Map;
 

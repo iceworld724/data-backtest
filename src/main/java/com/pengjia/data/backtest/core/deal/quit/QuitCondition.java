@@ -1,4 +1,6 @@
-package com.pengjia.data.backtest.core;
+package com.pengjia.data.backtest.core.deal.quit;
+
+import com.pengjia.data.backtest.core.Deal;
 
 public class QuitCondition {
 

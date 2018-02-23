@@ -1,13 +1,16 @@
 package com.pengjia.data.backtest.core;
 
+import com.pengjia.data.backtest.core.deal.DealType;
+import com.pengjia.data.backtest.core.data.DataPointer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Account {
 
     private float cash;
-    private List<Deal> unCompleteDeals;
-    private List<Deal> completeDeals;
+    private List<Deal> unCompleteDeals = new ArrayList<Deal>();
+    private List<Deal> completeDeals = new ArrayList<Deal>();
 
     public boolean isShortOn(DataPointer pointer) {
         for (Deal deal : unCompleteDeals) {
