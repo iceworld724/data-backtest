@@ -3,7 +3,7 @@ package com.pengjia.data.backtest.core;
 public enum Signal {
 
     NULL(null, null);
-    
+
     private String name;
     private SignalCalculator calculator;
 

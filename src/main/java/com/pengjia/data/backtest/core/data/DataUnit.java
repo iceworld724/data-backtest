@@ -60,7 +60,7 @@ public class DataUnit {
     public void setSignals(Map<Signal, Float> signals) {
         this.signals = signals;
     }
-    
+
     public Float getSignal(Signal signal) {
         return signals.get(signal);
     }

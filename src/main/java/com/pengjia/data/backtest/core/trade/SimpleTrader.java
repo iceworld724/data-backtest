@@ -1,9 +1,8 @@
 package com.pengjia.data.backtest.core.trade;
 
 import com.pengjia.data.backtest.core.Account;
-import com.pengjia.data.backtest.core.Deal;
+import com.pengjia.data.backtest.core.Position;
 import com.pengjia.data.backtest.core.Trader;
-import com.pengjia.data.backtest.core.deal.DealStatus;
 
 public class SimpleTrader implements Trader {
 
@@ -19,17 +18,26 @@ public class SimpleTrader implements Trader {
     }
 
     private void innerTrade(Account account, Order order) {
-        account.setCash(account.getCash() - order.value());
-        Deal deal = new Deal();
-        deal.deposit = order.value();
-        deal.minDeposit = 0;
-        deal.num = order.num;
-        deal.setPrice(order.price);
-        deal.prices.price = order.price;
-        deal.profit = Deal.profit(deal, order.price);
-        deal.status = DealStatus.UNCOMPLETE;
-        deal.symbol = order.symbol;
-        deal.type = order.type;
-        account.addDeal(deal);
+        synchronized (account) {
+            Position position = new Position();
+            switch (order.type) {
+                case LONG:
+                case SHORT:
+                    account.setCash(account.getCash() - order.value());
+                    position.num = order.num;
+                    position.prices.setPrice(order.price);
+                    position.symbol = order.symbol;
+                    account.addPosition(position);
+                    return;
+                case STOP_LONG:
+                case STOP_SHORT:
+                    account.setCash(account.getCash() + order.value());
+                    position.num = order.num;
+                    position.prices.setPrice(order.price);
+                    position.symbol = order.symbol;
+                    account.addPosition(position);
+                    return;
+            }
+        }
     }
 }

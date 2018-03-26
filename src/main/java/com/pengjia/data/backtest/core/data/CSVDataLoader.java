@@ -37,8 +37,8 @@ public class CSVDataLoader implements DataLoader {
 
         return data;
     }
-    
-    private DataUnit toDataUnit(CSVRecord record){
+
+    private DataUnit toDataUnit(CSVRecord record) {
         DataUnit unit = new DataUnit();
         unit.setClose(Float.parseFloat(record.get("close")));
         unit.setHigh(Float.parseFloat(record.get("high")));

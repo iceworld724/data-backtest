@@ -1,6 +1,6 @@
 package com.pengjia.data.backtest.core.deal.quit;
 
-import com.pengjia.data.backtest.core.Deal;
+import com.pengjia.data.backtest.core.Position;
 
 public class QuitCondition {
 
@@ -11,26 +11,26 @@ public class QuitCondition {
         this.quitType = quitType;
         this.percent = percent;
     }
-    
-    public boolean match(Deal deal, float price){
-        switch(deal.type){
+
+    public boolean match(Position position, float price) {
+        switch (position.type) {
             case LONG:
-                switch(quitType) {
+                switch (quitType) {
                     case STOP_LOSS:
-                        return (deal.prices.price - price) / deal.prices.price > percent;
+                        return (position.prices.price - price) / position.prices.price > percent;
                     case MOVING_STOP_LOSS:
-                        return (deal.prices.highestPrice - price) / deal.prices.highestPrice > percent;
+                        return (position.prices.highestPrice - price) / position.prices.highestPrice > percent;
                     case TAKE_PROFIT:
-                        return (price - deal.prices.price) / deal.prices.price > percent;
+                        return (price - position.prices.price) / position.prices.price > percent;
                 }
             case SHORT:
-                switch(quitType) {
+                switch (quitType) {
                     case STOP_LOSS:
-                        return (price - deal.prices.price) / deal.prices.price > percent;
+                        return (price - position.prices.price) / position.prices.price > percent;
                     case MOVING_STOP_LOSS:
-                        return (price - deal.prices.lowestPrice) / deal.prices.lowestPrice > percent;
+                        return (price - position.prices.lowestPrice) / position.prices.lowestPrice > percent;
                     case TAKE_PROFIT:
-                        return (deal.prices.price - price) / deal.prices.price > percent;
+                        return (position.prices.price - price) / position.prices.price > percent;
                 }
             default:
                 return true;

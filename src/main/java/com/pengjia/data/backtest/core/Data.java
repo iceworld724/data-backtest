@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
-    
+
     private List<DataUnit> dataUnits = new ArrayList<DataUnit>();
     private String symbol;
 
@@ -15,11 +15,11 @@ public class Data {
     public Data(String symbol) {
         this.symbol = symbol;
     }
-    
+
     public void addDataUnit(DataUnit dataUnit) {
         dataUnits.add(dataUnit);
     }
-    
+
     public List<DataUnit> getDataUnits() {
         return dataUnits;
     }

@@ -6,8 +6,8 @@ public class Order {
     public TradeType type;
     public float price;
     public int num;
-    
-    public float value(){
+
+    public float value() {
         return price * num;
     }
 }
