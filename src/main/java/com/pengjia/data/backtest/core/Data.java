@@ -41,4 +41,14 @@ public class Data {
     public void sort() {
         Collections.sort(dataUnits, new DataUnitComparator());
     }
+
+    public Data subData(int begin, int end) {
+        Data newData = new Data(symbol);
+        newData.setDataUnits(dataUnits.subList(begin, end));
+        return newData;
+    }
+
+    public Data subData(int end) {
+        return subData(0, end);
+    }
 }
