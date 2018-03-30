@@ -1,7 +1,9 @@
 package com.pengjia.data.backtest.core;
 
 import com.pengjia.data.backtest.core.data.DataUnit;
+import com.pengjia.data.backtest.core.data.DataUnitComparator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Data {
@@ -34,5 +36,9 @@ public class Data {
 
     public void setSymbol(String symbol) {
         this.symbol = symbol;
+    }
+
+    public void sort() {
+        Collections.sort(dataUnits, new DataUnitComparator());
     }
 }

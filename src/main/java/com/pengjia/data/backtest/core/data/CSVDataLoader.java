@@ -9,8 +9,13 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class CSVDataLoader implements DataLoader {
+
+    private static final DateTimeFormatter FORMAT
+            = DateTimeFormat.forPattern("yyyy/MM/dd");
 
     private final String fileUrl;
     private final String symbol;
@@ -34,17 +39,18 @@ public class CSVDataLoader implements DataLoader {
             parser.close();
             reader.close();
         }
-
+        data.sort();
         return data;
     }
 
     private DataUnit toDataUnit(CSVRecord record) {
         DataUnit unit = new DataUnit();
-        unit.setClose(Float.parseFloat(record.get("close")));
-        unit.setHigh(Float.parseFloat(record.get("high")));
-        unit.setLow(Float.parseFloat(record.get("low")));
-        unit.setOpen(Float.parseFloat(record.get("open")));
-        unit.setVol(Integer.parseInt(record.get("vol")));
+        unit.setBeginTime(FORMAT.parseDateTime(record.get("时间")));
+        unit.setClose(Float.parseFloat(record.get("收盘")));
+        unit.setHigh(Float.parseFloat(record.get("最高")));
+        unit.setLow(Float.parseFloat(record.get("最低")));
+        unit.setOpen(Float.parseFloat(record.get("开盘")));
+        unit.setVol(Integer.parseInt(record.get("成交量")));
         return unit;
     }
 }

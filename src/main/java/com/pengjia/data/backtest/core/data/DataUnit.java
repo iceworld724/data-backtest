@@ -3,9 +3,12 @@ package com.pengjia.data.backtest.core.data;
 import com.pengjia.data.backtest.core.Signal;
 import java.util.EnumMap;
 import java.util.Map;
+import org.joda.time.DateTime;
 
 public class DataUnit {
 
+    private DateTime beginTime;
+    private DateTime endTime;
     private float open;
     private float close;
     private float high;
@@ -63,5 +66,21 @@ public class DataUnit {
 
     public Float getSignal(Signal signal) {
         return signals.get(signal);
+    }
+
+    public DateTime getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(DateTime beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public DateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(DateTime endTime) {
+        this.endTime = endTime;
     }
 }
