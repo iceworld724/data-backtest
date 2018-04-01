@@ -1,13 +1,13 @@
 package com.pengjia.data.backtest.core;
 
-import com.pengjia.data.backtest.core.deal.quit.QuitCondition;
+import com.pengjia.data.backtest.core.position.QuitCondition;
 import com.pengjia.data.backtest.core.position.PositionType;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Position {
 
-    public static class Prices {
+    public static class HistoryPrices {
 
         public float highestPrice = Float.MIN_VALUE;    // 最高价
         public float lowestPrice = Float.MAX_VALUE;    // 最低价
@@ -27,7 +27,22 @@ public class Position {
     public String symbol;
     public PositionType type;
     public int num;
-    public Prices prices = new Prices();
+    public HistoryPrices prices = new HistoryPrices();
     public Collection<QuitCondition> quitConditions
             = new ArrayList<QuitCondition>();
+
+    public float profit(Data data) {
+        switch (type) {
+            case LONG:
+                return num * (data.latestPrice() - prices.price);
+            case SHORT:
+                return num * (prices.price - data.latestPrice());
+            default:
+                return 0;
+        }
+    }
+
+    public float value(Data data) {
+        return num * prices.price + profit(data);
+    }
 }

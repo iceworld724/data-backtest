@@ -3,6 +3,7 @@ package com.pengjia.data.backtest.core.trade;
 import com.pengjia.data.backtest.core.Account;
 import com.pengjia.data.backtest.core.Position;
 import com.pengjia.data.backtest.core.Trader;
+import com.pengjia.data.backtest.core.position.PositionType;
 
 public class SimpleTrader implements Trader {
 
@@ -22,20 +23,23 @@ public class SimpleTrader implements Trader {
             Position position = new Position();
             switch (order.type) {
                 case LONG:
-                case SHORT:
                     account.setCash(account.getCash() - order.value());
                     position.num = order.num;
                     position.prices.setPrice(order.price);
                     position.symbol = order.symbol;
+                    position.type = PositionType.LONG;
                     account.addPosition(position);
                     return;
-                case STOP_LONG:
-                case STOP_SHORT:
+                case SHORT:
                     account.setCash(account.getCash() + order.value());
                     position.num = order.num;
                     position.prices.setPrice(order.price);
                     position.symbol = order.symbol;
+                    position.type = PositionType.SHORT;
                     account.addPosition(position);
+                    return;
+                case STOP_LONG:
+                case STOP_SHORT:
                     return;
             }
         }

@@ -49,6 +49,10 @@ public class Data {
     }
 
     public Data subData(int end) {
-        return subData(0, end);
+        return subData(0, end + 1);
+    }
+
+    public float latestPrice() {
+        return dataUnits.get(dataUnits.size() - 1).getClose();
     }
 }

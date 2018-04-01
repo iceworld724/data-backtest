@@ -1,4 +1,4 @@
-package com.pengjia.data.backtest.core.deal.quit;
+package com.pengjia.data.backtest.core.position;
 
 import com.pengjia.data.backtest.core.Position;
 
@@ -16,6 +16,8 @@ public class QuitCondition {
         switch (position.type) {
             case LONG:
                 switch (quitType) {
+                    case NEVER:
+                        return false;
                     case STOP_LOSS:
                         return (position.prices.price - price) / position.prices.price > percent;
                     case MOVING_STOP_LOSS:
@@ -25,6 +27,8 @@ public class QuitCondition {
                 }
             case SHORT:
                 switch (quitType) {
+                    case NEVER:
+                        return false;
                     case STOP_LOSS:
                         return (price - position.prices.price) / position.prices.price > percent;
                     case MOVING_STOP_LOSS:

@@ -15,8 +15,11 @@ import java.util.List;
 public class Simulator {
 
     public static void main(String[] args) throws Exception {
+        List<Data> datas = new ArrayList<Data>();
+
         Account account = new Account();
         account.setCash(10000000f);
+        System.out.println(account.value(datas));
 
         Strategy strategy = new SimpleHoldStrategy();
 
@@ -25,15 +28,15 @@ public class Simulator {
         DataLoader loader = new CSVDataLoader(args[0], args[1]);
 
         Data data = loader.load();
-        List<Data> datas = new ArrayList<Data>();
         for (int i = 0; i < data.getDataUnits().size(); i++) {
-            Data subData = data.subData(i + 1);
+            Data subData = data.subData(i);
             datas.clear();
             datas.add(subData);
             List<Order> orders = strategy.makeOrder(datas, account);
             for (Order order : orders) {
                 trader.trade(account, order);
             }
+            System.out.println(account.value(datas));
         }
     }
 }

@@ -45,4 +45,17 @@ public class Account {
         symbolPositions.add(position);
         positions.put(position.symbol, symbolPositions);
     }
+
+    public float value(List<Data> datas) {
+        float sum = cash;
+        for (Data data : datas) {
+            if (positions.containsKey(data.getSymbol())) {
+                List<Position> positionList = positions.get(data.getSymbol());
+                for (Position position : positionList) {
+                    sum += position.value(data);
+                }
+            }
+        }
+        return sum;
+    }
 }
