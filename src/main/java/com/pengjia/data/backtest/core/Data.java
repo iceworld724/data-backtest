@@ -5,6 +5,7 @@ import com.pengjia.data.backtest.core.data.DataUnitComparator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.joda.time.DateTime;
 
 public class Data {
 
@@ -51,8 +52,16 @@ public class Data {
     public Data subData(int end) {
         return subData(0, end + 1);
     }
+ 
+    public DataUnit latestUnit(){
+        return dataUnits.get(dataUnits.size() - 1);
+    }
 
     public float latestPrice() {
-        return dataUnits.get(dataUnits.size() - 1).getClose();
+        return latestUnit().getClose();
+    }
+
+    public DateTime latestTime() {
+        return latestUnit().getBeginTime();
     }
 }
