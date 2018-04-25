@@ -1,9 +1,11 @@
 package com.pengjia.data.backtest.core;
 
+import com.pengjia.data.backtest.core.position.PositionType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Account {
 
@@ -46,16 +48,19 @@ public class Account {
         positions.put(position.symbol, symbolPositions);
     }
 
-    public float value(List<Data> datas) {
-        float sum = cash;
-        for (Data data : datas) {
-            if (positions.containsKey(data.getSymbol())) {
-                List<Position> positionList = positions.get(data.getSymbol());
-                for (Position position : positionList) {
-                    sum += position.value(data);
+    public float value(Data data) {
+        return cash + (float) positions.keySet().stream().mapToDouble(
+                symbol -> {
+                    List<Position> list = positions.get(symbol);
+                    return list.stream().mapToDouble(p -> p.value(data)).sum();
                 }
-            }
-        }
-        return sum;
+        ).sum();
+    }
+
+    public List<Position> getPositions(String symbol, PositionType type) {
+        List<Position> positionList = positions.get(symbol);
+        return positionList == null ? null : positions.get(symbol).stream()
+                .filter(d -> !d.type.equals(type))
+                .collect(Collectors.toList());
     }
 }

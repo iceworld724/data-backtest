@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface Strategy {
 
-    List<Order> makeOrder(List<Data> data, Account account);
+    List<Order> makeOrder(Data data, Account account);
 }

@@ -1,7 +1,6 @@
 package com.pengjia.data.backtest.core;
 
-import com.pengjia.data.backtest.core.data.DataUnit;
-import com.pengjia.data.backtest.core.data.DataUnitComparator;
+import com.pengjia.data.backtest.core.data.DataUnits;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,59 +8,53 @@ import org.joda.time.DateTime;
 
 public class Data {
 
-    private List<DataUnit> dataUnits = new ArrayList<DataUnit>();
-    private String symbol;
+    private List<DataUnits> dataSeries = new ArrayList<>();
 
     public Data() {
     }
 
-    public Data(String symbol) {
-        this.symbol = symbol;
+    public void addDataUnits(DataUnits dataUnits) {
+        dataSeries.add(dataUnits);
     }
 
-    public void addDataUnit(DataUnit dataUnit) {
-        dataUnits.add(dataUnit);
+    public List<DataUnits> getDataSeries() {
+        return dataSeries;
     }
 
-    public List<DataUnit> getDataUnits() {
-        return dataUnits;
-    }
-
-    public void setDataUnits(List<DataUnit> dataUnits) {
-        this.dataUnits = dataUnits;
-    }
-
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
+    public void setDataSeries(List<DataUnits> dataSeries) {
+        this.dataSeries = dataSeries;
     }
 
     public void sort() {
-        Collections.sort(dataUnits, new DataUnitComparator());
+        Collections.sort(dataSeries,
+                (DataUnits o1, DataUnits o2)
+                -> o1.getBeginTime().compareTo(o2.getBeginTime())
+        );
     }
 
     public Data subData(int begin, int end) {
-        Data newData = new Data(symbol);
-        newData.setDataUnits(dataUnits.subList(begin, end));
+        Data newData = new Data();
+        newData.setDataSeries(dataSeries.subList(begin, end));
         return newData;
     }
 
     public Data subData(int end) {
         return subData(0, end + 1);
     }
- 
-    public DataUnit latestUnit(){
-        return dataUnits.get(dataUnits.size() - 1);
+
+    public DataUnits latestUnits() {
+        return dataSeries.get(dataSeries.size() - 1);
     }
 
-    public float latestPrice() {
-        return latestUnit().getClose();
+    public float latestPrice(String symbol) {
+        return latestUnits().getDataUnit(symbol).getClose();
     }
 
     public DateTime latestTime() {
-        return latestUnit().getBeginTime();
+        return latestUnits().getBeginTime();
+    }
+
+    public int size() {
+        return dataSeries.size();
     }
 }

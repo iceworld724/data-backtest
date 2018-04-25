@@ -10,15 +10,15 @@ import java.util.List;
 public class SimpleHoldStrategy implements Strategy {
 
     @Override
-    public List<Order> makeOrder(List<Data> datas, Account account) {
+    public List<Order> makeOrder(Data data, Account account) {
         List<Order> orders = new ArrayList<Order>();
         if (account.getCash() > 0) {
             Order order = new Order();
-            float latestPrice = datas.get(0).getDataUnits().get(
-                    datas.get(0).getDataUnits().size() - 1).getClose();
+            String symbol = data.getDataSeries().get(0).getDataUnits().keySet().iterator().next();
+            float latestPrice = data.latestPrice(symbol);
             order.num = (int) Math.floor(account.getCash() / latestPrice);
             order.price = latestPrice;
-            order.symbol = datas.get(0).getSymbol();
+            order.symbol = symbol;
             order.type = TradeType.LONG;
             orders.add(order);
         }

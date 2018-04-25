@@ -34,9 +34,9 @@ public class Position {
     public float profit(Data data) {
         switch (type) {
             case LONG:
-                return num * (data.latestPrice() - prices.price);
+                return num * (data.latestPrice(symbol) - prices.price);
             case SHORT:
-                return num * (prices.price - data.latestPrice());
+                return num * (prices.price - data.latestPrice(symbol));
             default:
                 return 0;
         }

@@ -30,6 +30,26 @@ public class SimpleTrader implements Trader {
                     position.type = PositionType.LONG;
                     account.addPosition(position);
                     return;
+                case ADD_LONG:
+                    account.setCash(account.getCash() - order.value());
+                    position.prices.setPrice((order.price * order.num
+                            + position.prices.price * position.num)
+                            / (order.num + position.num));
+                    position.num += order.num;
+                    position.symbol = order.symbol;
+                    position.type = PositionType.LONG;
+                    account.addPosition(position);
+                    return;
+                case REDUCE_LONG:
+                    account.setCash(account.getCash() + order.value());
+                    position.prices.setPrice((position.prices.price * position.num
+                            - order.price * order.num)
+                            / (position.num - order.num));
+                    position.num -= order.num;
+                    position.symbol = order.symbol;
+                    position.type = PositionType.LONG;
+                    account.addPosition(position);
+                    return;
                 case SHORT:
                     account.setCash(account.getCash() + order.value());
                     position.num = order.num;

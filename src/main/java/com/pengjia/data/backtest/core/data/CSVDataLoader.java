@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -30,10 +32,10 @@ public class CSVDataLoader implements DataLoader {
         final URL url = new URL(fileUrl);
         final Reader reader = new InputStreamReader(new BOMInputStream(url.openStream()), "UTF-8");
         final CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL.withHeader());
-        Data data = new Data(symbol);
+        Data data = new Data();
         try {
             for (final CSVRecord record : parser) {
-                data.addDataUnit(toDataUnit(record));
+                data.addDataUnits(toDataUnits(record));
             }
         } finally {
             parser.close();
@@ -43,14 +45,18 @@ public class CSVDataLoader implements DataLoader {
         return data;
     }
 
-    private DataUnit toDataUnit(CSVRecord record) {
+    private DataUnits toDataUnits(CSVRecord record) {
+        DataUnits dataUnits = new DataUnits();
+        dataUnits.setBeginTime(FORMAT.parseDateTime(record.get("时间")));
+        Map<String, DataUnit> units = new HashMap<String, DataUnit>();
         DataUnit unit = new DataUnit();
-        unit.setBeginTime(FORMAT.parseDateTime(record.get("时间")));
         unit.setClose(Float.parseFloat(record.get("收盘")));
         unit.setHigh(Float.parseFloat(record.get("最高")));
         unit.setLow(Float.parseFloat(record.get("最低")));
         unit.setOpen(Float.parseFloat(record.get("开盘")));
         unit.setVol(Integer.parseInt(record.get("成交量")));
-        return unit;
+        units.put(symbol, unit);
+        dataUnits.setDataUnit(symbol, unit);
+        return dataUnits;
     }
 }
