@@ -23,32 +23,38 @@ public class SimpleTrader implements Trader {
             Position position = new Position();
             switch (order.type) {
                 case LONG:
-                    account.setCash(account.getCash() - order.value());
-                    position.num = order.num;
-                    position.prices.setPrice(order.price);
-                    position.symbol = order.symbol;
-                    position.type = PositionType.LONG;
-                    account.addPosition(position);
+                    if (account.getCash() > order.value()) {
+                        account.setCash(account.getCash() - order.value());
+                        position.num = order.num;
+                        position.prices.setPrice(order.price);
+                        position.symbol = order.symbol;
+                        position.type = PositionType.LONG;
+                        account.addPosition(position);
+                    }
                     return;
                 case ADD_LONG:
-                    account.setCash(account.getCash() - order.value());
-                    position.prices.setPrice((order.price * order.num
-                            + position.prices.price * position.num)
-                            / (order.num + position.num));
-                    position.num += order.num;
-                    position.symbol = order.symbol;
-                    position.type = PositionType.LONG;
-                    account.addPosition(position);
+                    position = account.getPositions(order.symbol, PositionType.LONG).get(0);
+                    if (account.getCash() > order.value()) {
+                        account.setCash(account.getCash() - order.value());
+                        position.prices.setPrice((order.price * order.num
+                                + position.prices.price * position.num)
+                                / (order.num + position.num));
+                        position.num += order.num;
+                        position.symbol = order.symbol;
+                        position.type = PositionType.LONG;
+                    }
                     return;
                 case REDUCE_LONG:
-                    account.setCash(account.getCash() + order.value());
-                    position.prices.setPrice((position.prices.price * position.num
-                            - order.price * order.num)
-                            / (position.num - order.num));
-                    position.num -= order.num;
-                    position.symbol = order.symbol;
-                    position.type = PositionType.LONG;
-                    account.addPosition(position);
+                    position = account.getPositions(order.symbol, PositionType.LONG).get(0);
+                    if (account.getPositions(order.symbol, PositionType.LONG).get(0).num > order.num) {
+                        account.setCash(account.getCash() + order.value());
+                        position.prices.setPrice((position.prices.price * position.num
+                                - order.price * order.num)
+                                / (position.num - order.num));
+                        position.num -= order.num;
+                        position.symbol = order.symbol;
+                        position.type = PositionType.LONG;
+                    }
                     return;
                 case SHORT:
                     account.setCash(account.getCash() + order.value());

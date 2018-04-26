@@ -5,7 +5,7 @@ public class Order {
     public String symbol;
     public TradeType type;
     public float price;
-    public int num;
+    public float num;
 
     public float value() {
         return price * num;

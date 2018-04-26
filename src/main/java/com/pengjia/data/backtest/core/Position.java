@@ -26,7 +26,7 @@ public class Position {
 
     public String symbol;
     public PositionType type;
-    public int num;
+    public float num;
     public HistoryPrices prices = new HistoryPrices();
     public Collection<QuitCondition> quitConditions
             = new ArrayList<QuitCondition>();

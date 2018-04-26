@@ -40,6 +40,7 @@ public class SimpleBalanceStrategy implements Strategy {
                     order.symbol = symbol;
                     order.type = TradeType.LONG;
                     orders.add(order);
+                    lastTime = data.latestTime();
                     continue;
                 }
                 Position position = positionList.get(0);
@@ -52,6 +53,8 @@ public class SimpleBalanceStrategy implements Strategy {
                     order.symbol = symbol;
                     order.type = TradeType.ADD_LONG;
                     orders.add(order);
+                    lastTime = data.latestTime();
+                    continue;
                 } else if (bias > maxBias) {
                     Order order = new Order();
                     order.num = (int) ((value - baseValue) / data.latestPrice(symbol));
@@ -59,11 +62,13 @@ public class SimpleBalanceStrategy implements Strategy {
                     order.symbol = symbol;
                     order.type = TradeType.REDUCE_LONG;
                     orders.add(order);
+                    lastTime = data.latestTime();
+                    continue;
                 }
             }
-
             return orders;
         }
+        lastTime = data.latestTime();
         return null;
     }
 }

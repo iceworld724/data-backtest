@@ -60,7 +60,7 @@ public class Account {
     public List<Position> getPositions(String symbol, PositionType type) {
         List<Position> positionList = positions.get(symbol);
         return positionList == null ? null : positions.get(symbol).stream()
-                .filter(d -> !d.type.equals(type))
+                .filter(d -> d.type.equals(type))
                 .collect(Collectors.toList());
     }
 }
