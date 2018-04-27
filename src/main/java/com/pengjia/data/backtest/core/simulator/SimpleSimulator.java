@@ -1,6 +1,5 @@
 package com.pengjia.data.backtest.core.simulator;
 
-import com.google.gson.Gson;
 import com.pengjia.data.backtest.core.Account;
 import com.pengjia.data.backtest.core.Data;
 import com.pengjia.data.backtest.core.Trader;
@@ -11,24 +10,33 @@ import com.pengjia.data.backtest.core.strategy.Strategy;
 import com.pengjia.data.backtest.core.trade.Order;
 import com.pengjia.data.backtest.core.trade.SimpleTrader;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class SimpleSimulator implements Simulator {
 
-    private static Gson GSON = new Gson();
-
     public static void main(String[] args) throws Exception {
-
-        Strategy strategy1 = new SimpleBalanceStrategy(0.5f, 0.2f, 86400);
-        Strategy strategy2 = new SimpleBalanceStrategy(0.5f, 0.1f, 86400);
-        Strategy strategy3 = new SimpleBalanceStrategy(0.5f, 0.05f, 86400);
+        ExecutorService executor = Executors.newFixedThreadPool(3);
 
         DataLoader loader = new CSVDataLoader(args[0], args[1]);
 
-        Simulator simulator = new SimpleSimulator();
+        Data data = loader.load();
 
-        System.out.println(GSON.toJson(simulator.simulate(loader.load(), strategy1)));
-        System.out.println(GSON.toJson(simulator.simulate(loader.load(), strategy2)));
-        System.out.println(GSON.toJson(simulator.simulate(loader.load(), strategy3)));
+        for (float bias = 0.05f; bias < 0.5f; bias = bias + 0.0001f) {
+
+            Strategy strategy = new SimpleBalanceStrategy(0.5f, bias, 86400);
+
+            Simulator simulator = new SimpleSimulator();
+
+            executor.submit(() -> simulator.simulate(data, strategy));
+        }
+
+        executor.shutdown();
+
+        executor.awaitTermination(1, TimeUnit.MINUTES);
+
+        executor.shutdownNow();
     }
 
     @Override
