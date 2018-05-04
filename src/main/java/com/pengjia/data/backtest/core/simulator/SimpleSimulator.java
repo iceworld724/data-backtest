@@ -6,6 +6,7 @@ import com.pengjia.data.backtest.core.Trader;
 import com.pengjia.data.backtest.core.data.CSVDataLoader;
 import com.pengjia.data.backtest.core.data.DataLoader;
 import com.pengjia.data.backtest.core.strategy.SimpleBalanceStrategy;
+import com.pengjia.data.backtest.core.strategy.SimpleHoldStrategy;
 import com.pengjia.data.backtest.core.strategy.Strategy;
 import com.pengjia.data.backtest.core.trade.Order;
 import com.pengjia.data.backtest.core.trade.SimpleTrader;
@@ -23,9 +24,11 @@ public class SimpleSimulator implements Simulator {
 
         Data data = loader.load();
 
-        for (float bias = 0.05f; bias < 0.5f; bias = bias + 0.0001f) {
+        for (float bias = 0.05f; bias < 0.5f; bias = bias + 0.001f) {
 
             Strategy strategy = new SimpleBalanceStrategy(0.5f, bias, 86400);
+
+            //Strategy strategy = new SimpleHoldStrategy();
 
             Simulator simulator = new SimpleSimulator();
 

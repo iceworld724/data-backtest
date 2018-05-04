@@ -4,6 +4,7 @@ import com.pengjia.data.backtest.core.Account;
 import com.pengjia.data.backtest.core.Data;
 import com.pengjia.data.backtest.core.Position;
 import com.pengjia.data.backtest.core.position.PositionType;
+import com.pengjia.data.backtest.core.trade.Constant;
 import com.pengjia.data.backtest.core.trade.Order;
 import com.pengjia.data.backtest.core.trade.TradeType;
 import java.util.ArrayList;
@@ -35,11 +36,17 @@ public class SimpleBalanceStrategy implements Strategy {
                 List<Position> positionList = account.getPositions(symbol, PositionType.LONG);
                 if (positionList == null || positionList.isEmpty()) {
                     Order order = new Order();
-                    order.num = (int) (baseValue / data.latestPrice(symbol));
                     order.price = data.latestPrice(symbol);
+                    order.num = (int) Math.min(Math.floor(baseValue / order.price / (1 + Constant.FEE_RATIO)),
+                            Math.floor((baseValue - Constant.MIN_FEE) / order.price));
+                    if (order.num % 100 != 0) {
+                        order.num -= order.num % 100;
+                    }
                     order.symbol = symbol;
                     order.type = TradeType.LONG;
-                    orders.add(order);
+                    if (order.num > 0) {
+                        orders.add(order);
+                    }
                     lastTime = data.latestTime();
                     continue;
                 }
@@ -48,20 +55,33 @@ public class SimpleBalanceStrategy implements Strategy {
                 float bias = (value - baseValue) / baseValue;
                 if (bias < -maxBias) {
                     Order order = new Order();
-                    order.num = (int) ((baseValue - value) / data.latestPrice(symbol));
                     order.price = data.latestPrice(symbol);
+                    order.num = (int) Math.min(Math.floor((baseValue - value) / 2f / order.price / (1 + Constant.FEE_RATIO)),
+                            Math.floor(((baseValue - value) / 2f - Constant.MIN_FEE) / order.price));
+                    if (order.num % 100 != 0) {
+                        order.num -= order.num % 100;
+                    }
                     order.symbol = symbol;
                     order.type = TradeType.ADD_LONG;
-                    orders.add(order);
+                    if (order.num > 0) {
+                        orders.add(order);
+                    }
                     lastTime = data.latestTime();
                     continue;
                 } else if (bias > maxBias) {
                     Order order = new Order();
                     order.num = (int) ((value - baseValue) / data.latestPrice(symbol));
                     order.price = data.latestPrice(symbol);
+                    order.num = (int) Math.min(Math.floor((value - baseValue) / 2f / order.price / (1 + Constant.FEE_RATIO)),
+                            Math.floor(((value - baseValue) / 2f - Constant.MIN_FEE) / order.price));
+                    if (order.num % 100 != 0) {
+                        order.num -= order.num % 100;
+                    }
                     order.symbol = symbol;
                     order.type = TradeType.REDUCE_LONG;
-                    orders.add(order);
+                    if (order.num > 0) {
+                        orders.add(order);
+                    }
                     lastTime = data.latestTime();
                     continue;
                 }
