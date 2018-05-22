@@ -11,6 +11,7 @@ public class DataUnit {
     private float high;
     private float low;
     private float vol;
+    private float amount;
     private Map<Signal, Float> signals = new EnumMap<>(Signal.class);
 
     public float getOpen() {
@@ -51,5 +52,13 @@ public class DataUnit {
 
     public void setVol(float vol) {
         this.vol = vol;
+    }
+
+    public float getAmount() {
+        return amount;
+    }
+
+    public void setAmount(float amount) {
+        this.amount = amount;
     }
 }
