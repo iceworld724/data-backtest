@@ -16,7 +16,7 @@ public class SimpleHoldStrategy implements Strategy {
         List<Order> orders = new ArrayList<Order>();
         if (account.getCash() > 0) {
             Order order = new Order();
-            String symbol = data.getDataSeries().get(0).getDataUnits().keySet().iterator().next();
+            String symbol = data.getDataSeries().get(0).keySet().iterator().next();
             float latestPrice = data.latestPrice(symbol);
             float fee = Math.max(order.num * order.price * Constant.FEE_RATIO, Constant.MIN_FEE);
             order.num = (int) Math.min(Math.floor(account.getCash() / latestPrice / (1 + Constant.FEE_RATIO)),

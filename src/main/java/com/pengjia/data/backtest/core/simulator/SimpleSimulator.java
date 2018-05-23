@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import org.joda.time.DateTime;
 
 public class SimpleSimulator implements Simulator {
 
@@ -29,7 +30,6 @@ public class SimpleSimulator implements Simulator {
             Strategy strategy = new SimpleBalanceStrategy(0.5f, bias, 86400);
 
             //Strategy strategy = new SimpleHoldStrategy();
-
             Simulator simulator = new SimpleSimulator();
 
             executor.submit(() -> simulator.simulate(data, strategy));
@@ -50,8 +50,10 @@ public class SimpleSimulator implements Simulator {
         ReportCollector collector = new ReportCollector();
 
         Trader trader = new SimpleTrader();
-        for (int i = 0; i < data.size(); i++) {
-            Data subData = data.subData(i);
+        for (DateTime time = data.firstTime();
+                time.isBefore(data.latestTime()) || time.isEqual(data.latestTime());
+                time.plusMinutes(1)) {
+            Data subData = data.subData(time);
             List<Order> orders = strategy.makeOrder(subData, account);
             if (orders != null) {
                 for (Order order : orders) {

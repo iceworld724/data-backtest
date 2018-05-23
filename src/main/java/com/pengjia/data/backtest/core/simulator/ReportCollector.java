@@ -63,6 +63,6 @@ public class ReportCollector {
         float sum = profits.stream().reduce((f1, f2) -> f1 + f2).get();
         report.DAY_MEAN = sum / (float) profits.size();
         report.DAY_SD = (float) (Math.sqrt(profits.stream().mapToDouble(profit -> Math.pow(profit - report.DAY_MEAN, 2)).sum() / ((double) (profits.size() - 1))));
-        report.DAY_SHARPE = (report.DAY_MEAN - (0.04f / 365f) ) / report.DAY_SD;
+        report.DAY_SHARPE = (report.DAY_MEAN - (0.04f / 365f)) / report.DAY_SD;
     }
 }

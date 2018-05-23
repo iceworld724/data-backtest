@@ -1,60 +1,78 @@
 package com.pengjia.data.backtest.core;
 
-import com.pengjia.data.backtest.core.data.DataUnits;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.pengjia.data.backtest.core.data.DataUnit;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 import org.joda.time.DateTime;
 
 public class Data {
 
-    private List<DataUnits> dataSeries = new ArrayList<>();
+    private TreeMap<DateTime, Map<String, DataUnit>> dataSeries = new TreeMap<>();
 
     public Data() {
     }
 
-    public void addDataUnits(DataUnits dataUnits) {
-        dataSeries.add(dataUnits);
+    public void addDataUnit(DateTime time, String symbol, DataUnit unit) {
+        if (dataSeries.containsKey(time)) {
+            dataSeries.get(time).put(symbol, unit);
+        } else {
+            Map<String, DataUnit> map = new HashMap<>();
+            map.put(symbol, unit);
+            dataSeries.put(time, map);
+        }
     }
 
-    public List<DataUnits> getDataSeries() {
+    public Map<DateTime, Map<String, DataUnit>> getDataSeries() {
         return dataSeries;
     }
 
-    public void setDataSeries(List<DataUnits> dataSeries) {
+    public void setDataSeries(TreeMap<DateTime, Map<String, DataUnit>> dataSeries) {
         this.dataSeries = dataSeries;
     }
 
-    public void sort() {
-        Collections.sort(dataSeries,
-                (DataUnits o1, DataUnits o2)
-                -> o1.getBeginTime().compareTo(o2.getBeginTime())
-        );
-    }
-
-    public Data subData(int begin, int end) {
+    public Data subData(DateTime begin, DateTime end) {
         Data newData = new Data();
-        newData.setDataSeries(dataSeries.subList(begin, end));
+        dataSeries.entrySet().stream().filter(
+                e -> (begin == null || e.getKey().isAfter(begin) || e.getKey().equals(begin))
+                && (end == null || e.getKey().isBefore(end) || e.getKey().equals(end)))
+                .forEach(e -> {
+                    newData.dataSeries.put(e.getKey(), e.getValue());
+                });
         return newData;
     }
 
-    public Data subData(int end) {
-        return subData(0, end + 1);
+    public Data subData(DateTime end) {
+        return subData(null, end);
     }
 
-    public DataUnits latestUnits() {
-        return dataSeries.get(dataSeries.size() - 1);
+    public Map<String, DataUnit> latestUnits() {
+        return dataSeries.get(dataSeries.lastKey());
     }
 
     public float latestPrice(String symbol) {
-        return latestUnits().getDataUnit(symbol).getClose();
+        return latestUnits().get(symbol).getClose();
+    }
+
+    public DateTime firstTime() {
+        return dataSeries.firstKey();
     }
 
     public DateTime latestTime() {
-        return latestUnits().getBeginTime();
+        return dataSeries.lastKey();
     }
 
     public int size() {
         return dataSeries.size();
+    }
+
+    public void merge(Data data) {
+        for (Entry<DateTime, Map<String, DataUnit>> entry : data.dataSeries.entrySet()) {
+            for (Entry<String, DataUnit> entry2 : entry.getValue().entrySet()) {
+                addDataUnit(entry.getKey(), entry2.getKey(), entry2.getValue());
+            }
+        }
     }
 }

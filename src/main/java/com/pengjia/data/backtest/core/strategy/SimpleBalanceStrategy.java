@@ -31,7 +31,7 @@ public class SimpleBalanceStrategy implements Strategy {
         if (lastTime == null || lastTime.plusSeconds(interval).isBefore(time)) {
             float baseValue = account.value(data) * (1 - cashRatio) / data.latestUnits().size();
             List<Order> orders = new ArrayList<Order>();
-            Collection<String> symbols = data.latestUnits().getDataUnits().keySet();
+            Collection<String> symbols = data.latestUnits().keySet();
             for (String symbol : symbols) {
                 List<Position> positionList = account.getPositions(symbol, PositionType.LONG);
                 if (positionList == null || positionList.isEmpty()) {

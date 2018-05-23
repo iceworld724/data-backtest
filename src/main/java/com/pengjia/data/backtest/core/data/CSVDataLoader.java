@@ -5,14 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import scala.Tuple2;
 
 public class CSVDataLoader implements DataLoader {
 
@@ -35,28 +35,24 @@ public class CSVDataLoader implements DataLoader {
         Data data = new Data();
         try {
             for (final CSVRecord record : parser) {
-                data.addDataUnits(toDataUnits(record));
+                Tuple2<DataUnit, DateTime> tuple2 = toDataUnits(record);
+                data.addDataUnit(tuple2._2, symbol, tuple2._1);
             }
         } finally {
             parser.close();
             reader.close();
         }
-        data.sort();
         return data;
     }
 
-    private DataUnits toDataUnits(CSVRecord record) {
-        DataUnits dataUnits = new DataUnits();
-        dataUnits.setBeginTime(FORMAT.parseDateTime(record.get("时间")));
-        Map<String, DataUnit> units = new HashMap<String, DataUnit>();
+    private Tuple2<DataUnit, DateTime> toDataUnits(CSVRecord record) {
+        DateTime time = FORMAT.parseDateTime(record.get("时间"));
         DataUnit unit = new DataUnit();
         unit.setClose(Float.parseFloat(record.get("收盘")));
         unit.setHigh(Float.parseFloat(record.get("最高")));
         unit.setLow(Float.parseFloat(record.get("最低")));
         unit.setOpen(Float.parseFloat(record.get("开盘")));
         unit.setVol(Integer.parseInt(record.get("成交量")));
-        units.put(symbol, unit);
-        dataUnits.setDataUnit(symbol, unit);
-        return dataUnits;
+        return new Tuple2<>(unit, time);
     }
 }

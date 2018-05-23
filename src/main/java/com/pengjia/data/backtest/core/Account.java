@@ -10,10 +10,8 @@ import java.util.stream.Collectors;
 public class Account {
 
     private float cash = 0f;
-    private Map<String, List<Position>> positions
-            = new HashMap<String, List<Position>>();
-    private Map<String, Float> deposits
-            = new HashMap<String, Float>();
+    private Map<String, List<Position>> positions = new HashMap<>();
+    private Map<String, Float> deposits = new HashMap<>();
 
     public float getCash() {
         return cash;
