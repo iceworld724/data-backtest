@@ -24,7 +24,7 @@ public class Position {
         }
     }
 
-    public String symbol;
+    public Code symbol;
     public PositionType type;
     public float num;
     public HistoryPrices prices = new HistoryPrices();

@@ -1,6 +1,7 @@
 package com.pengjia.data.backtest.core.strategy;
 
 import com.pengjia.data.backtest.core.Account;
+import com.pengjia.data.backtest.core.Code;
 import com.pengjia.data.backtest.core.Data;
 import com.pengjia.data.backtest.core.Position;
 import com.pengjia.data.backtest.core.position.PositionType;
@@ -31,8 +32,8 @@ public class SimpleBalanceStrategy implements Strategy {
         if (lastTime == null || lastTime.plusSeconds(interval).isBefore(time)) {
             float baseValue = account.value(data) * (1 - cashRatio) / data.latestUnits().size();
             List<Order> orders = new ArrayList<Order>();
-            Collection<String> symbols = data.latestUnits().keySet();
-            for (String symbol : symbols) {
+            Collection<Code> symbols = data.latestUnits().keySet();
+            for (Code symbol : symbols) {
                 List<Position> positionList = account.getPositions(symbol, PositionType.LONG);
                 if (positionList == null || positionList.isEmpty()) {
                     Order order = new Order();

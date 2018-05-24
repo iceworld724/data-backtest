@@ -1,5 +1,6 @@
 package com.pengjia.data.backtest.core.data;
 
+import com.pengjia.data.backtest.core.Code;
 import com.pengjia.data.backtest.core.Data;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,7 +28,7 @@ public class WindDirCSVDataLoader implements DataLoader {
 
         String[] files = dir.list();
         for (String file : files) {
-            String symbol = file.substring(0, file.lastIndexOf("."));
+            Code symbol = new Code(file.substring(0, file.lastIndexOf(".")));
             final Reader reader = new InputStreamReader(new BOMInputStream(
                     new FileInputStream(new File(dir, file))), "UTF-8");
             final CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL.withHeader());

@@ -1,6 +1,7 @@
 package com.pengjia.data.backtest.core.strategy;
 
 import com.pengjia.data.backtest.core.Account;
+import com.pengjia.data.backtest.core.Code;
 import com.pengjia.data.backtest.core.Data;
 import com.pengjia.data.backtest.core.trade.Constant;
 import com.pengjia.data.backtest.core.trade.Order;
@@ -16,7 +17,7 @@ public class SimpleHoldStrategy implements Strategy {
         List<Order> orders = new ArrayList<Order>();
         if (account.getCash() > 0) {
             Order order = new Order();
-            String symbol = data.getDataSeries().get(0).keySet().iterator().next();
+            Code symbol = data.getDataSeries().get(0).keySet().iterator().next();
             float latestPrice = data.latestPrice(symbol);
             float fee = Math.max(order.num * order.price * Constant.FEE_RATIO, Constant.MIN_FEE);
             order.num = (int) Math.min(Math.floor(account.getCash() / latestPrice / (1 + Constant.FEE_RATIO)),

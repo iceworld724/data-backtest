@@ -1,5 +1,6 @@
 package com.pengjia.data.backtest.core.data;
 
+import com.pengjia.data.backtest.core.Code;
 import com.pengjia.data.backtest.core.Data;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -15,9 +16,9 @@ import scala.Tuple2;
 public class WindCSVDataLoader implements DataLoader {
 
     private final String fileUrl;
-    private final String symbol;
+    private final Code symbol;
 
-    public WindCSVDataLoader(String symbol, String fileUrl) {
+    public WindCSVDataLoader(Code symbol, String fileUrl) {
         this.fileUrl = fileUrl;
         this.symbol = symbol;
     }

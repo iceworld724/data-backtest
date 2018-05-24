@@ -1,5 +1,6 @@
 package com.pengjia.data.backtest.core.data;
 
+import com.pengjia.data.backtest.core.Code;
 import com.pengjia.data.backtest.core.Data;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,9 +21,9 @@ public class CSVDataLoader implements DataLoader {
             = DateTimeFormat.forPattern("yyyy/MM/dd");
 
     private final String fileUrl;
-    private final String symbol;
+    private final Code symbol;
 
-    public CSVDataLoader(String symbol, String fileUrl) {
+    public CSVDataLoader(Code symbol, String fileUrl) {
         this.fileUrl = fileUrl;
         this.symbol = symbol;
     }

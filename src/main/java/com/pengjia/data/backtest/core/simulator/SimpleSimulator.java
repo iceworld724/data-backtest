@@ -1,6 +1,7 @@
 package com.pengjia.data.backtest.core.simulator;
 
 import com.pengjia.data.backtest.core.Account;
+import com.pengjia.data.backtest.core.Code;
 import com.pengjia.data.backtest.core.Data;
 import com.pengjia.data.backtest.core.Trader;
 import com.pengjia.data.backtest.core.data.CSVDataLoader;
@@ -21,7 +22,7 @@ public class SimpleSimulator implements Simulator {
     public static void main(String[] args) throws Exception {
         ExecutorService executor = Executors.newFixedThreadPool(3);
 
-        DataLoader loader = new CSVDataLoader(args[0], args[1]);
+        DataLoader loader = new CSVDataLoader(new Code(args[0]), args[1]);
 
         Data data = loader.load();
 

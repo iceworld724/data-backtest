@@ -5,31 +5,31 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 import org.joda.time.DateTime;
 
 public class Data {
 
-    private TreeMap<DateTime, Map<String, DataUnit>> dataSeries = new TreeMap<>();
+    private TreeMap<DateTime, Map<Code, DataUnit>> dataSeries
+            = new TreeMap<>((dt1, dt2) -> dt1.compareTo(dt2));
 
     public Data() {
     }
 
-    public void addDataUnit(DateTime time, String symbol, DataUnit unit) {
+    public void addDataUnit(DateTime time, Code symbol, DataUnit unit) {
         if (dataSeries.containsKey(time)) {
             dataSeries.get(time).put(symbol, unit);
         } else {
-            Map<String, DataUnit> map = new HashMap<>();
+            Map<Code, DataUnit> map = new HashMap<>();
             map.put(symbol, unit);
             dataSeries.put(time, map);
         }
     }
 
-    public Map<DateTime, Map<String, DataUnit>> getDataSeries() {
+    public Map<DateTime, Map<Code, DataUnit>> getDataSeries() {
         return dataSeries;
     }
 
-    public void setDataSeries(TreeMap<DateTime, Map<String, DataUnit>> dataSeries) {
+    public void setDataSeries(TreeMap<DateTime, Map<Code, DataUnit>> dataSeries) {
         this.dataSeries = dataSeries;
     }
 
@@ -48,11 +48,11 @@ public class Data {
         return subData(null, end);
     }
 
-    public Map<String, DataUnit> latestUnits() {
+    public Map<Code, DataUnit> latestUnits() {
         return dataSeries.get(dataSeries.lastKey());
     }
 
-    public float latestPrice(String symbol) {
+    public float latestPrice(Code symbol) {
         return latestUnits().get(symbol).getClose();
     }
 
@@ -69,8 +69,8 @@ public class Data {
     }
 
     public void merge(Data data) {
-        for (Entry<DateTime, Map<String, DataUnit>> entry : data.dataSeries.entrySet()) {
-            for (Entry<String, DataUnit> entry2 : entry.getValue().entrySet()) {
+        for (Entry<DateTime, Map<Code, DataUnit>> entry : data.dataSeries.entrySet()) {
+            for (Entry<Code, DataUnit> entry2 : entry.getValue().entrySet()) {
                 addDataUnit(entry.getKey(), entry2.getKey(), entry2.getValue());
             }
         }

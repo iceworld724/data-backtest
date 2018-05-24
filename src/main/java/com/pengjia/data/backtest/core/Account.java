@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 public class Account {
 
     private float cash = 0f;
-    private Map<String, List<Position>> positions = new HashMap<>();
-    private Map<String, Float> deposits = new HashMap<>();
+    private Map<Code, List<Position>> positions = new HashMap<>();
+    private Map<Code, Float> deposits = new HashMap<>();
 
     public float getCash() {
         return cash;
@@ -21,19 +21,19 @@ public class Account {
         this.cash = cash;
     }
 
-    public Map<String, List<Position>> getPositions() {
+    public Map<Code, List<Position>> getPositions() {
         return positions;
     }
 
-    public void setPositions(Map<String, List<Position>> positions) {
+    public void setPositions(Map<Code, List<Position>> positions) {
         this.positions = positions;
     }
 
-    public Map<String, Float> getDeposits() {
+    public Map<Code, Float> getDeposits() {
         return deposits;
     }
 
-    public void setDeposits(Map<String, Float> deposits) {
+    public void setDeposits(Map<Code, Float> deposits) {
         this.deposits = deposits;
     }
 
@@ -55,7 +55,7 @@ public class Account {
         ).sum();
     }
 
-    public List<Position> getPositions(String symbol, PositionType type) {
+    public List<Position> getPositions(Code symbol, PositionType type) {
         List<Position> positionList = positions.get(symbol);
         return positionList == null ? null : positions.get(symbol).stream()
                 .filter(d -> d.type.equals(type))

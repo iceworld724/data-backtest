@@ -1,8 +1,10 @@
 package com.pengjia.data.backtest.core.trade;
 
+import com.pengjia.data.backtest.core.Code;
+
 public class Order {
 
-    public String symbol;
+    public Code symbol;
     public TradeType type;
     public float price;
     public float num;
