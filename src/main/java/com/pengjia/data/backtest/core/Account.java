@@ -1,6 +1,7 @@
 package com.pengjia.data.backtest.core;
 
 import com.pengjia.data.backtest.core.position.PositionType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,9 +48,9 @@ public class Account {
     }
 
     public float value(Data data) {
-        return cash + (float) positions.keySet().stream().mapToDouble(
-                symbol -> {
-                    List<Position> list = positions.get(symbol);
+        return cash + (float) positions.entrySet().stream().mapToDouble(
+                entry -> {
+                    List<Position> list = entry.getValue();
                     return list.stream().mapToDouble(p -> p.value(data)).sum();
                 }
         ).sum();

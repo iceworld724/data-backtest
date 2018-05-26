@@ -40,15 +40,14 @@ public class ReportCollector {
 
     public void calMaxDrawBacks(Report report) {
         float max = Float.MIN_VALUE;
-        List<Entry<DateTime, Float>> entries = new ArrayList<>(dateValues.entrySet());
-        for (int i = 0; i < entries.size(); i++) {
-            Entry<DateTime, Float> before = entries.get(i);
-            for (int j = i + 1; j < entries.size(); j++) {
-                Entry<DateTime, Float> after = entries.get(j);
-                float draw = (after.getValue() - before.getValue()) / before.getValue();
-                if (draw < max) {
-                    max = draw;
-                }
+        float peak = Float.MIN_VALUE;
+        for (Float value : dateValues.values()) {
+            if (value > peak) {
+                peak = value;
+            }
+            float draw = (peak - value) / peak;
+            if (draw > max) {
+                max = draw;
             }
         }
         report.MAX_DRAW_BACK = max;

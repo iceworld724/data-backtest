@@ -1,15 +1,18 @@
 package com.pengjia.data.backtest.core;
 
 import com.pengjia.data.backtest.core.data.DataUnit;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NavigableMap;
 import java.util.TreeMap;
+
 import org.joda.time.DateTime;
 
 public class Data {
 
-    private TreeMap<DateTime, Map<Code, DataUnit>> dataSeries
+    private NavigableMap<DateTime, Map<Code, DataUnit>> dataSeries
             = new TreeMap<>((dt1, dt2) -> dt1.compareTo(dt2));
 
     public Data() {
@@ -34,13 +37,15 @@ public class Data {
     }
 
     public Data subData(DateTime begin, DateTime end) {
+        if (begin == null) {
+            begin = dataSeries.firstKey();
+        }
+        if (end == null) {
+            end = dataSeries.lastKey();
+        }
+
         Data newData = new Data();
-        dataSeries.entrySet().stream().filter(
-                e -> (begin == null || e.getKey().isAfter(begin) || e.getKey().equals(begin))
-                && (end == null || e.getKey().isBefore(end) || e.getKey().equals(end)))
-                .forEach(e -> {
-                    newData.dataSeries.put(e.getKey(), e.getValue());
-                });
+        newData.dataSeries = dataSeries.subMap(begin, true, end, true);
         return newData;
     }
 
@@ -49,7 +54,7 @@ public class Data {
     }
 
     public Map<Code, DataUnit> latestUnits() {
-        return dataSeries.get(dataSeries.lastKey());
+        return dataSeries.lastEntry().getValue();
     }
 
     public float latestPrice(Code symbol) {

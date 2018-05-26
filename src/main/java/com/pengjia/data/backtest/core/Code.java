@@ -4,21 +4,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Code implements Comparable<Code> {
-    
+
     private static Pattern PATTERN = Pattern.compile("([A-Z]+)([0-9]+)");
-    
+
     private String symbol;
     private int month;
-    
-    public Code(String str){
+
+    public Code(String str) {
         Matcher matcher = PATTERN.matcher(str);
-        if(matcher.find()){
+        if (matcher.find()) {
             symbol = matcher.group(1);
             month = Integer.parseInt(matcher.group(2));
         }
     }
-    
-    public Code(String symbol, int month){
+
+    public Code(String symbol, int month) {
         this.symbol = symbol;
         this.month = month;
     }

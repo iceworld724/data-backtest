@@ -1,16 +1,16 @@
 package com.pengjia.data.backtest.core.simulator;
 
 import com.pengjia.data.backtest.core.Account;
-import com.pengjia.data.backtest.core.Code;
 import com.pengjia.data.backtest.core.Data;
 import com.pengjia.data.backtest.core.Trader;
-import com.pengjia.data.backtest.core.data.CSVDataLoader;
 import com.pengjia.data.backtest.core.data.DataLoader;
+import com.pengjia.data.backtest.core.data.WindDirCSVDataLoader;
 import com.pengjia.data.backtest.core.strategy.SimpleBalanceStrategy;
 import com.pengjia.data.backtest.core.strategy.SimpleHoldStrategy;
 import com.pengjia.data.backtest.core.strategy.Strategy;
 import com.pengjia.data.backtest.core.trade.Order;
 import com.pengjia.data.backtest.core.trade.SimpleTrader;
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,13 +20,13 @@ import org.joda.time.DateTime;
 public class SimpleSimulator implements Simulator {
 
     public static void main(String[] args) throws Exception {
-        ExecutorService executor = Executors.newFixedThreadPool(3);
+        ExecutorService executor = Executors.newFixedThreadPool(1);
 
-        DataLoader loader = new CSVDataLoader(new Code(args[0]), args[1]);
+        DataLoader loader = new WindDirCSVDataLoader(new File(args[0]));
 
         Data data = loader.load();
 
-        for (float bias = 0.05f; bias < 0.5f; bias = bias + 0.001f) {
+        for (float bias = 0.05f; bias < 0.5f; bias = bias + 0.01f) {
 
             Strategy strategy = new SimpleBalanceStrategy(0.5f, bias, 86400);
 
@@ -51,16 +51,13 @@ public class SimpleSimulator implements Simulator {
         ReportCollector collector = new ReportCollector();
 
         Trader trader = new SimpleTrader();
-        for (DateTime time = data.firstTime();
-                time.isBefore(data.latestTime()) || time.isEqual(data.latestTime());
-                time.plusMinutes(1)) {
+        for (DateTime time : data.getDataSeries().keySet()) {
             Data subData = data.subData(time);
             List<Order> orders = strategy.makeOrder(subData, account);
             if (orders != null) {
                 for (Order order : orders) {
                     trader.trade(account, order);
                 }
-                //System.out.println(GSON.toJson(account));
             }
             collector.collect(subData.latestTime(), account.value(subData));
         }
