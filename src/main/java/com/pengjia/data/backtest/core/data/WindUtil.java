@@ -20,6 +20,7 @@ public class WindUtil {
         unit.setOpen(Float.parseFloat(record.get("open")));
         unit.setVol(Float.parseFloat(record.get("volume")));
         unit.setAmount(Float.parseFloat(record.get("amount")));
+        unit.setOi(Float.parseFloat(record.get("position")));
         return new Tuple2<>(unit, time);
     }
 }
